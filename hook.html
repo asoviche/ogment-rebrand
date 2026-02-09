@@ -369,7 +369,7 @@ h1 .claw {
   max-width: 860px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 36px 180px 36px 1fr;
+  grid-template-columns: 1fr 36px 220px 36px 1fr;
   align-items: center;
   gap: 0;
 }
@@ -410,7 +410,7 @@ h1 .claw {
 .diagram-node .dn { font-size: 12px; font-weight: 600; }
 .diagram-node .ds { font-size: 10px; color: var(--text-dim); }
 .diagram-center {
-  padding: 22px 16px;
+  padding: 28px 20px;
   border-radius: 14px;
   text-align: center;
   position: relative;
@@ -428,7 +428,7 @@ h1 .claw {
   z-index: -1;
 }
 .diagram-center .dc-title {
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 900;
   background: var(--gradient);
   -webkit-background-clip: text;
@@ -449,9 +449,9 @@ h1 .claw {
   margin-top: 10px;
 }
 .diagram-center .dc-feat {
-  padding: 3px 8px;
-  border-radius: 4px;
-  font-size: 9px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 10px;
   font-weight: 600;
   background: rgba(255,255,255,0.04);
   color: var(--text-muted);
@@ -723,52 +723,36 @@ footer a:hover { color: var(--text); }
       <div class="darrow"></div>
       <div class="darrow"></div>
       <div class="darrow"></div>
-      <div class="darrow"></div>
-      <div class="darrow"></div>
     </div>
 
     <div class="diagram-col">
-      <div class="diagram-label">Your OpenClaw agent</div>
+      <div class="diagram-label">Any AI client</div>
       <div class="diagram-node" style="border-color:rgba(234,88,12,0.25);">
         <div class="di" style="background:rgba(234,88,12,0.12);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 8c0-3 2-5 4-6M19 8c0-3-2-5-4-6M7 8c0 3 2 6 5 8M17 8c0 3-2 6-5 8M12 16v4" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round"/></svg></div>
         <div>
           <div class="dn" style="color:var(--claw-orange);">OpenClaw</div>
-          <div class="ds">"Pull Acme's deal status"</div>
+          <div class="ds">Personal AI Agent</div>
         </div>
       </div>
       <div class="diagram-node">
-        <div class="di" style="background:rgba(234,88,12,0.12);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 8c0-3 2-5 4-6M19 8c0-3-2-5-4-6M7 8c0 3 2 6 5 8M17 8c0 3-2 6-5 8M12 16v4" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+        <div class="di" style="background:rgba(16,163,127,0.12);"><svg width="14" height="14" viewBox="0 0 24 24" fill="#10a37f"><path d="M22.28 9.37a5.93 5.93 0 0 0-.51-4.89 6.05 6.05 0 0 0-6.5-2.91A5.93 5.93 0 0 0 10.8.14a6.05 6.05 0 0 0-5.77 4.18 5.93 5.93 0 0 0-3.97 2.88 6.05 6.05 0 0 0 .74 7.09 5.93 5.93 0 0 0 .51 4.89 6.05 6.05 0 0 0 6.5 2.91 5.93 5.93 0 0 0 4.47 1.43 6.05 6.05 0 0 0 5.77-4.18 5.93 5.93 0 0 0 3.97-2.88 6.05 6.05 0 0 0-.74-7.09z"/></svg></div>
         <div>
-          <div class="dn" style="color:var(--claw-orange);">OpenClaw</div>
-          <div class="ds">"Qualify this lead"</div>
+          <div class="dn">ChatGPT</div>
+          <div class="ds">OpenAI</div>
         </div>
       </div>
       <div class="diagram-node">
-        <div class="di" style="background:rgba(234,88,12,0.12);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 8c0-3 2-5 4-6M19 8c0-3-2-5-4-6M7 8c0 3 2 6 5 8M17 8c0 3-2 6-5 8M12 16v4" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+        <div class="di" style="background:rgba(204,147,100,0.12);"><svg width="14" height="14" viewBox="0 0 24 24" fill="#cc7832"><path d="M16.98 2H7.02L2 12l5.02 10h9.96L22 12 16.98 2zM12 16.5a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg></div>
         <div>
-          <div class="dn" style="color:var(--claw-orange);">OpenClaw</div>
-          <div class="ds">"Post revenue to #sales"</div>
+          <div class="dn">Claude</div>
+          <div class="ds">Anthropic</div>
         </div>
       </div>
       <div class="diagram-node">
-        <div class="di" style="background:rgba(234,88,12,0.12);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 8c0-3 2-5 4-6M19 8c0-3-2-5-4-6M7 8c0 3 2 6 5 8M17 8c0 3-2 6-5 8M12 16v4" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+        <div class="di" style="background:rgba(124,58,237,0.12);">🤖</div>
         <div>
-          <div class="dn" style="color:var(--claw-orange);">OpenClaw</div>
-          <div class="ds">"Run campaign report"</div>
-        </div>
-      </div>
-      <div class="diagram-node">
-        <div class="di" style="background:rgba(234,88,12,0.12);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 8c0-3 2-5 4-6M19 8c0-3-2-5-4-6M7 8c0 3 2 6 5 8M17 8c0 3-2 6-5 8M12 16v4" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round"/></svg></div>
-        <div>
-          <div class="dn" style="color:var(--claw-orange);">OpenClaw</div>
-          <div class="ds">"Create quote for 50 seats"</div>
-        </div>
-      </div>
-      <div class="diagram-node">
-        <div class="di" style="background:rgba(234,88,12,0.12);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 8c0-3 2-5 4-6M19 8c0-3-2-5-4-6M7 8c0 3 2 6 5 8M17 8c0 3-2 6-5 8M12 16v4" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round"/></svg></div>
-        <div>
-          <div class="dn" style="color:var(--claw-orange);">OpenClaw</div>
-          <div class="ds">"Anything you need"</div>
+          <div class="dn">Custom Agent</div>
+          <div class="ds">Any MCP client</div>
         </div>
       </div>
     </div>
