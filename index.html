@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ogment — Enterprise Platform for MCP</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #09090b;
+  --bg-elevated: #18181b;
+  --bg-card: #1c1c21;
+  --border: #27272a;
+  --text: #fafafa;
+  --text-muted: #a1a1aa;
+  --text-dim: #71717a;
+  --accent-1: #7c3aed;
+  --accent-2: #2563eb;
+  --accent-3: #06b6d4;
+  --gradient: linear-gradient(135deg, #7c3aed, #2563eb, #06b6d4);
+  --gradient-subtle: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(37,99,235,0.15), rgba(6,182,212,0.15));
+  --glow: 0 0 80px rgba(124,58,237,0.15), 0 0 160px rgba(37,99,235,0.08);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Utility */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.gradient-text {
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent-3);
+  animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Nav */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 16px 0;
+  background: rgba(9,9,11,0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s;
+}
+nav.scrolled { border-bottom-color: var(--border); }
+nav .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.logo span { color: var(--accent-1); }
+nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+nav a:hover { color: var(--text); }
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: none;
+}
+.btn-primary {
+  background: var(--gradient);
+  color: white;
+  box-shadow: 0 0 20px rgba(124,58,237,0.3);
+}
+.btn-primary:hover {
+  box-shadow: 0 0 30px rgba(124,58,237,0.5);
+  transform: translateY(-1px);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover { border-color: var(--text-dim); background: var(--bg-elevated); }
+
+/* Hero */
+.hero {
+  padding: 180px 0 120px;
+  text-align: center;
+  position: relative;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 800px; height: 600px;
+  background: radial-gradient(ellipse, rgba(124,58,237,0.12) 0%, rgba(37,99,235,0.06) 40%, transparent 70%);
+  pointer-events: none;
+}
+.hero h1 {
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  margin-bottom: 24px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.hero p {
+  font-size: clamp(16px, 2vw, 20px);
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto 40px;
+  line-height: 1.7;
+}
+.hero-cta { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+/* Grid lines bg */
+.grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask: radial-gradient(ellipse 50% 50% at 50% 50%, black, transparent);
+  pointer-events: none;
+}
+
+/* Section */
+section { padding: 120px 0; position: relative; }
+.section-label {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent-3);
+  margin-bottom: 16px;
+}
+.section-title {
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+.section-desc {
+  font-size: 17px;
+  color: var(--text-muted);
+  max-width: 600px;
+  line-height: 1.7;
+}
+.section-header { margin-bottom: 64px; }
+
+/* Value Props */
+.value-props {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+@media (max-width: 768px) { .value-props { grid-template-columns: 1fr; } }
+.value-prop {
+  padding: 40px 32px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  position: relative;
+  overflow: hidden;
+}
+.value-prop::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--gradient);
+}
+.value-prop-icon {
+  font-size: 36px;
+  margin-bottom: 20px;
+  display: block;
+}
+.value-prop h3 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+.value-prop p {
+  font-size: 15px;
+  color: var(--text-muted);
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+.value-prop-clients {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.client-tag {
+  padding: 4px 12px;
+  border-radius: 100px;
+  background: rgba(124,58,237,0.15);
+  font-size: 12px;
+  color: var(--accent-1);
+  font-weight: 500;
+}
+.client-tag:nth-child(2n) { background: rgba(37,99,235,0.15); color: var(--accent-2); }
+.client-tag:nth-child(3n) { background: rgba(6,182,212,0.15); color: var(--accent-3); }
+
+/* Use Cases */
+.use-cases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+.use-case-card {
+  padding: 32px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.use-case-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--gradient);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.use-case-card:hover { border-color: #3f3f46; transform: translateY(-2px); }
+.use-case-card:hover::before { opacity: 1; }
+.use-case-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  background: var(--gradient-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+.use-case-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+.use-case-card p {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+.use-case-benefit {
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: rgba(6,182,212,0.06);
+  border: 1px solid rgba(6,182,212,0.15);
+  font-size: 12px;
+  color: var(--accent-3);
+  font-weight: 600;
+}
+
+/* Pillars */
+.pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  background: var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+@media (max-width: 768px) { .pillars-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .pillars-grid { grid-template-columns: 1fr; } }
+.pillar {
+  padding: 40px 32px;
+  background: var(--bg-card);
+  text-align: center;
+  transition: background 0.3s;
+}
+.pillar:hover { background: #1f1f24; }
+.pillar-num {
+  font-size: 48px;
+  font-weight: 900;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 16px;
+  line-height: 1;
+}
+.pillar h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.pillar p {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* Stats */
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  padding: 80px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.stat { text-align: center; }
+.stat-num {
+  font-size: 48px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+.stat-label {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* FAQ */
+.faq-list { max-width: 720px; margin: 0 auto; }
+.faq-item {
+  border-bottom: 1px solid var(--border);
+}
+.faq-q {
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 600;
+  text-align: left;
+  padding: 24px 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: inherit;
+  transition: color 0.2s;
+}
+.faq-q:hover { color: var(--accent-3); }
+.faq-q svg {
+  width: 20px; height: 20px;
+  transition: transform 0.3s;
+  flex-shrink: 0;
+  color: var(--text-dim);
+}
+.faq-item.open .faq-q svg { transform: rotate(45deg); }
+.faq-a {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s;
+}
+.faq-item.open .faq-a { max-height: 300px; }
+.faq-a p {
+  padding-bottom: 24px;
+  font-size: 15px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* CTA Section */
+.cta-section {
+  text-align: center;
+  padding: 120px 0;
+  position: relative;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 400px;
+  background: radial-gradient(ellipse, rgba(124,58,237,0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-section h2 {
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 16px;
+}
+.cta-section p {
+  color: var(--text-muted);
+  font-size: 17px;
+  margin-bottom: 40px;
+}
+
+/* Footer */
+footer {
+  padding: 40px 0;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+/* Animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Creative Diagram */
+.creative-diagram {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
+  min-height: 580px;
+}
+.cd-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 260px;
+  padding: 28px 24px;
+  border-radius: 20px;
+  background: var(--bg-card);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  z-index: 10;
+  text-align: center;
+  box-shadow: var(--glow), 0 0 120px rgba(37,99,235,0.08);
+}
+.cd-center::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 22px;
+  background: var(--gradient);
+  z-index: -1;
+}
+.cd-center::after {
+  content: '';
+  position: absolute;
+  inset: -40px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124,58,237,0.08) 0%, transparent 70%);
+  z-index: -2;
+  animation: cd-pulse 4s ease-in-out infinite;
+}
+@keyframes cd-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+.cd-orbit {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px dashed rgba(124,58,237,0.15);
+  pointer-events: none;
+}
+.cd-orbit-1 { width: 460px; height: 460px; }
+.cd-orbit-2 { width: 660px; height: 580px; border-radius: 50%; border-color: rgba(6,182,212,0.1); }
+.cd-node {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+  z-index: 5;
+  transition: all 0.3s;
+  cursor: default;
+}
+.cd-node:hover {
+  border-color: #3f3f46;
+  transform: scale(1.05);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.cd-node .cd-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.cd-node .cd-label { font-size: 13px; font-weight: 700; color: var(--text); }
+.cd-node .cd-sub { font-size: 11px; color: var(--text-dim); font-weight: 400; }
+.cd-line {
+  position: absolute;
+  z-index: 1;
+  overflow: visible;
+}
+.cd-line line {
+  stroke: url(#grad-line);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 4;
+  animation: cd-dash 20s linear infinite;
+}
+@keyframes cd-dash {
+  to { stroke-dashoffset: -200; }
+}
+.cd-side-label {
+  position: absolute;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  z-index: 6;
+}
+.cd-process {
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  font-size: 11px;
+  text-align: left;
+  margin-top: 6px;
+}
+.cd-process strong { color: var(--text); font-weight: 700; }
+.cd-process span { color: var(--text-dim); }
+.cd-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+@media (max-width: 768px) {
+  .creative-diagram { display: none; }
+  .cd-mobile-fallback { display: block !important; }
+}
+.cd-mobile-fallback { display: none; }
+
+/* Architecture Diagram */
+.arch-diagram {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 0;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.arch-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.arch-node {
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: border-color 0.3s;
+}
+.arch-node:hover { border-color: #3f3f46; }
+.arch-node .node-icon {
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.arch-node .node-label { font-size: 13px; color: var(--text); font-weight: 600; }
+.arch-node .node-sub { font-size: 11px; color: var(--text-dim); font-weight: 400; }
+.arch-center {
+  padding: 32px 28px;
+  border-radius: 16px;
+  border: 2px solid transparent;
+  background: linear-gradient(var(--bg-card), var(--bg-card)) padding-box,
+              var(--gradient) border-box;
+  text-align: center;
+  position: relative;
+  box-shadow: var(--glow);
+}
+.arch-center h3 {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.arch-center p {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.arch-arrows {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+}
+.arch-arrow {
+  color: var(--text-dim);
+  font-size: 20px;
+  line-height: 1;
+  opacity: 0.5;
+}
+.arch-col-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  text-align: center;
+  margin-bottom: 12px;
+}
+@media (max-width: 768px) {
+  .arch-diagram {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .arch-arrows {
+    flex-direction: row;
+    padding: 8px 0;
+  }
+  .arch-arrow { transform: rotate(90deg); }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .nav-links a:not(.btn) { display: none; }
+  .stats { gap: 40px; }
+  .hero { padding: 140px 0 80px; }
+  section { padding: 80px 0; }
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="container">
+    <div class="logo">ogment<span>.</span></div>
+    <div class="nav-links">
+      <a href="#how-it-works">How It Works</a>
+      <a href="#use-cases">Use Cases</a>
+      <a href="#platform">Platform</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://calendly.com/teo-bg/20min-access" class="btn btn-primary" target="_blank">Book a Demo</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="grid-bg"></div>
+  <div class="container">
+    <div class="badge">Enterprise Platform for MCP</div>
+    <h1 style="margin-top:24px">
+      One control plane.<br>
+      <span class="gradient-text">Every AI client. Zero lock-in.</span>
+    </h1>
+    <p>Define your tools and business logic once via MCP. Expose them to ChatGPT, Claude, Cursor, custom agents—any AI client. Switch providers freely. Your integrations outlive any vendor.</p>
+    <div class="hero-cta">
+      <a href="https://calendly.com/teo-bg/20min-access" class="btn btn-primary" target="_blank">
+        Book a Demo
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#platform" class="btn btn-ghost">See the Platform</a>
+    </div>
+  </div>
+</section>
+
+<div class="stats reveal">
+  <div class="stat">
+    <div class="stat-num gradient-text">300+</div>
+    <div class="stat-label">Enterprise connectors</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num gradient-text">&lt;1hr</div>
+    <div class="stat-label">First MCP to production</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num gradient-text">100%</div>
+    <div class="stat-label">Audit trail coverage</div>
+  </div>
+</div>
+
+<section style="background: var(--bg-elevated);">
+  <div class="container">
+    <div class="section-header reveal" style="text-align:center;">
+      <div class="section-label">Why MCP Changes Everything</div>
+      <h2 class="section-title">Stop building vendor-specific plugins.<br><span class="gradient-text">Build once. Deploy everywhere.</span></h2>
+      <p class="section-desc" style="margin:16px auto 0;">MCP is the universal standard that frees your AI integrations from vendor lock-in.</p>
+    </div>
+    <div class="value-props">
+      <div class="value-prop reveal">
+        <span class="value-prop-icon">🎛️</span>
+        <h3>One Control Plane → Every LLM</h3>
+        <p>Define your tools and business logic once. Expose them to ANY AI client that speaks MCP. One integration replaces dozens of vendor-specific plugins.</p>
+        <div class="value-prop-clients">
+          <span class="client-tag">ChatGPT</span>
+          <span class="client-tag">Claude</span>
+          <span class="client-tag">Cursor</span>
+          <span class="client-tag">Custom Agents</span>
+          <span class="client-tag">Partner AIs</span>
+        </div>
+      </div>
+      <div class="value-prop reveal">
+        <span class="value-prop-icon">🔓</span>
+        <h3>No Vendor Lock-In. Ever.</h3>
+        <p>Build business rules inside ChatGPT's GPTs? You're stuck with OpenAI. Hardcode them into Claude? Stuck with Anthropic. MCP is an open standard—define once, switch providers in minutes.</p>
+        <div style="margin-top: 20px; padding: 16px; border-radius: 10px; background: rgba(6,182,212,0.06); border: 1px solid rgba(6,182,212,0.15);">
+          <p style="font-size: 13px; color: var(--accent-3); font-weight: 600; margin-bottom: 4px;">The bottom line</p>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">Your AI integrations should outlive any single vendor.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how-it-works">
+  <div class="container">
+    <div class="section-header reveal" style="text-align:center;">
+      <div class="section-label">How It Works</div>
+      <h2 class="section-title">Define once. <span class="gradient-text">Expose everywhere.</span></h2>
+      <p class="section-desc" style="margin:16px auto 0;">Your business tools on the left. Every AI client on the right. Ogment in the middle — with auth, governance, and audit built in.</p>
+    </div>
+    <div class="arch-diagram reveal">
+      <div class="arch-col">
+        <div class="arch-col-label">Your Business Tools</div>
+        <div class="arch-node">
+          <div class="node-icon" style="background:rgba(37,99,235,0.15);">🔷</div>
+          <div><div class="node-label">Salesforce</div><div class="node-sub">CRM & Sales Data</div></div>
+        </div>
+        <div class="arch-node">
+          <div class="node-icon" style="background:rgba(124,58,237,0.15);">📋</div>
+          <div><div class="node-label">Jira</div><div class="node-sub">Project Management</div></div>
+        </div>
+        <div class="arch-node">
+          <div class="node-icon" style="background:rgba(6,182,212,0.15);">🗄️</div>
+          <div><div class="node-label">Internal APIs</div><div class="node-sub">Your Custom Logic</div></div>
+        </div>
+        <div class="arch-node">
+          <div class="node-icon" style="background:rgba(124,58,237,0.15);">📊</div>
+          <div><div class="node-label">Databases</div><div class="node-sub">Postgres, BigQuery</div></div>
+        </div>
+        <div class="arch-node">
+          <div class="node-icon" style="background:rgba(37,99,235,0.15);">📁</div>
+          <div><div class="node-label">Google Drive</div><div class="node-sub">Docs & Files</div></div>
+        </div>
+      </div>
+
+      <div class="arch-arrows">
+        <div class="arch-arrow">→</div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-arrow">→</div>
+      </div>
+
+      <div>
+        <div class="arch-col-label">Control Plane</div>
+        <div class="arch-center">
+          <div style="font-size: 28px; margin-bottom: 8px;">⬡</div>
+          <h3 class="gradient-text">Ogment</h3>
+          <p style="margin-top:4px; font-size:12px; color:var(--text-dim);">Your AI Control Plane</p>
+
+          <div style="margin-top:16px; padding:14px; border-radius:10px; background:rgba(255,255,255,0.03); border:1px solid var(--border);">
+            <p style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-dim); margin-bottom:10px;">Your Business Logic — Portable & Open</p>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              <div style="padding:8px 12px; border-radius:8px; background:var(--bg); border:1px solid var(--border); text-align:left;">
+                <div style="font-size:12px; font-weight:700; color:var(--text);">📦 MCP Servers</div>
+                <div style="font-size:11px; color:var(--text-dim); margin-top:2px;">Standardized APIs to your systems — CRM, ERP, databases. The open protocol that makes everything portable.</div>
+              </div>
+              <div style="padding:8px 12px; border-radius:8px; background:var(--bg); border:1px solid var(--border); text-align:left;">
+                <div style="font-size:12px; font-weight:700; color:var(--text);">⚙️ Skills</div>
+                <div style="font-size:11px; color:var(--text-dim); margin-top:2px;">Your business logic encoded — quote generation, approval chains, pricing rules. The AI knows <em>how</em> your company works.</div>
+              </div>
+              <div style="padding:8px 12px; border-radius:8px; background:var(--bg); border:1px solid var(--border); text-align:left;">
+                <div style="font-size:12px; font-weight:700; color:var(--text);">🔌 Plugins</div>
+                <div style="font-size:11px; color:var(--text-dim); margin-top:2px;">Ready-made packages — Salesforce, Stripe, Slack, SAP. Install and go, with auth and governance included.</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px; display:flex; flex-direction:column; gap:5px;">
+            <div style="padding:5px 12px; border-radius:6px; background:rgba(124,58,237,0.1); font-size:11px; color:var(--accent-1); font-weight:600;">🔐 Auth & Permissions</div>
+            <div style="padding:5px 12px; border-radius:6px; background:rgba(37,99,235,0.1); font-size:11px; color:var(--accent-2); font-weight:600;">📋 Audit Logs</div>
+            <div style="padding:5px 12px; border-radius:6px; background:rgba(6,182,212,0.1); font-size:11px; color:var(--accent-3); font-weight:600;">📊 Monitoring</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-arrows">
+        <div class="arch-arrow">→</div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-arrow">→</div>
+      </div>
+
+      <div class="arch-col">
+        <div class="arch-col-label">Any AI Client</div>
+        <div class="arch-node">
+          <div class="node-icon" style="background:rgba(16,163,127,0.15);"><svg width="18" height="18" viewBox="0 0 24 24" fill="#10a37f"><path d="M22.28 9.37a5.93 5.93 0 0 0-.51-4.89 6.05 6.05 0 0 0-6.5-2.91A5.93 5.93 0 0 0 10.8.14a6.05 6.05 0 0 0-5.77 4.18 5.93 5.93 0 0 0-3.97 2.88 6.05 6.05 0 0 0 .74 7.09 5.93 5.93 0 0 0 .51 4.89 6.05 6.05 0 0 0 6.5 2.91 5.93 5.93 0 0 0 4.47 1.43 6.05 6.05 0 0 0 5.77-4.18 5.93 5.93 0 0 0 3.97-2.88 6.05 6.05 0 0 0-.74-7.09zM13.2 22.1a4.5 4.5 0 0 1-2.88-1.04l.14-.08 4.78-2.76a.78.78 0 0 0 .39-.67v-6.74l2.02 1.17a.07.07 0 0 1 .04.06v5.58a4.52 4.52 0 0 1-4.49 4.48zM3.6 18.14a4.5 4.5 0 0 1-.54-3.02l.14.09 4.78 2.76a.78.78 0 0 0 .78 0l5.83-3.37v2.33a.07.07 0 0 1-.03.06l-4.83 2.79a4.52 4.52 0 0 1-6.13-1.64zM2.34 7.89A4.5 4.5 0 0 1 4.7 5.91v5.69a.78.78 0 0 0 .39.67l5.83 3.37-2.02 1.17a.07.07 0 0 1-.07 0L4 13.99a4.52 4.52 0 0 1-1.66-6.1zM19.1 12.03l-5.83-3.37 2.02-1.17a.07.07 0 0 1 .07 0l4.83 2.79a4.52 4.52 0 0 1-.7 8.14v-5.69a.78.78 0 0 0-.39-.67v-.03zm2.01-3.03-.14-.09-4.78-2.76a.78.78 0 0 0-.78 0l-5.83 3.37V7.19a.07.07 0 0 1 .03-.06l4.83-2.79a4.52 4.52 0 0 1 6.67 4.66zM8.35 13.37l-2.02-1.17a.07.07 0 0 1-.04-.06V6.56a4.52 4.52 0 0 1 7.37-3.48l-.14.08-4.78 2.76a.78.78 0 0 0-.39.67v6.78zm1.1-2.37 2.6-1.5 2.6 1.5v3l-2.6 1.5-2.6-1.5v-3z"/></svg></div>
+          <div><div class="node-label">ChatGPT</div><div class="node-sub">OpenAI</div></div>
+        </div>
+        <div class="arch-node">
+          <div class="node-icon" style="background:rgba(204,147,100,0.15);"><svg width="18" height="18" viewBox="0 0 24 24" fill="#cc7832"><path d="M16.98 2H7.02L2 12l5.02 10h9.96L22 12 16.98 2zM12 16.5a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg></div>
+          <div><div class="node-label">Claude</div><div class="node-sub">Anthropic</div></div>
+        </div>
+        <div class="arch-node">
+          <div class="node-icon" style="background:rgba(124,58,237,0.15);">⌨️</div>
+          <div><div class="node-label">Cursor</div><div class="node-sub">IDE Agent</div></div>
+        </div>
+        <div class="arch-node">
+          <div class="node-icon" style="background:rgba(234,88,12,0.15);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 8c0-3 2-5 4-6M19 8c0-3-2-5-4-6M7 8c0 3 2 6 5 8M17 8c0 3-2 6-5 8M12 16v4" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+          <div><div class="node-label">OpenClaw</div><div class="node-sub">Personal AI Agent</div></div>
+        </div>
+        <div class="arch-node">
+          <div class="node-icon" style="background:rgba(37,99,235,0.15);">🦜</div>
+          <div><div class="node-label">LangChain</div><div class="node-sub">Agent Framework</div></div>
+        </div>
+        <div class="arch-node">
+          <div class="node-icon" style="background:rgba(124,58,237,0.15);">🤖</div>
+          <div><div class="node-label">Custom AI Agent</div><div class="node-sub">Your Backend</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background: var(--bg-elevated); overflow:hidden;">
+  <div class="container">
+    <div class="section-header reveal" style="text-align:center;">
+      <div class="section-label">Real Example</div>
+      <h2 class="section-title">A SaaS company automates<br><span class="gradient-text">sales & marketing with Ogment</span></h2>
+      <p class="section-desc" style="margin:16px auto 0;">Define your sales processes once. Every team — and every AI tool they use — gets instant access.</p>
+    </div>
+
+    <!-- Creative orbital diagram -->
+    <div class="creative-diagram reveal">
+      <!-- SVG defs for animated gradient lines -->
+      <svg style="position:absolute; width:0; height:0;">
+        <defs>
+          <linearGradient id="grad-line" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.6"/>
+            <stop offset="50%" stop-color="#2563eb" stop-opacity="0.8"/>
+            <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.6"/>
+          </linearGradient>
+          <linearGradient id="grad-line-r" x1="100%" y1="0%" x2="0%" y2="0%">
+            <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.6"/>
+            <stop offset="50%" stop-color="#2563eb" stop-opacity="0.8"/>
+            <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.6"/>
+          </linearGradient>
+        </defs>
+      </svg>
+
+      <!-- Orbits -->
+      <div class="cd-orbit cd-orbit-1"></div>
+      <div class="cd-orbit cd-orbit-2"></div>
+
+      <!-- Animated connection lines -->
+      <svg class="cd-line" style="position:absolute; inset:0; width:100%; height:100%;">
+        <!-- Left to center -->
+        <line x1="18%" y1="18%" x2="40%" y2="38%" stroke="url(#grad-line)" stroke-width="1.5" stroke-dasharray="6 4" style="animation: cd-dash 15s linear infinite;"/>
+        <line x1="10%" y1="38%" x2="40%" y2="42%" stroke="url(#grad-line)" stroke-width="1.5" stroke-dasharray="6 4" style="animation: cd-dash 18s linear infinite;"/>
+        <line x1="14%" y1="62%" x2="40%" y2="52%" stroke="url(#grad-line)" stroke-width="1.5" stroke-dasharray="6 4" style="animation: cd-dash 12s linear infinite;"/>
+        <line x1="8%" y1="80%" x2="40%" y2="58%" stroke="url(#grad-line)" stroke-width="1.5" stroke-dasharray="6 4" style="animation: cd-dash 20s linear infinite;"/>
+        <line x1="18%" y1="94%" x2="42%" y2="62%" stroke="url(#grad-line)" stroke-width="1.5" stroke-dasharray="6 4" style="animation: cd-dash 16s linear infinite;"/>
+        <!-- Center to right -->
+        <line x1="60%" y1="38%" x2="80%" y2="12%" stroke="url(#grad-line-r)" stroke-width="1.5" stroke-dasharray="6 4" style="animation: cd-dash 14s linear infinite;"/>
+        <line x1="60%" y1="42%" x2="82%" y2="34%" stroke="url(#grad-line-r)" stroke-width="1.5" stroke-dasharray="6 4" style="animation: cd-dash 17s linear infinite;"/>
+        <line x1="60%" y1="50%" x2="78%" y2="56%" stroke="url(#grad-line-r)" stroke-width="1.5" stroke-dasharray="6 4" style="animation: cd-dash 13s linear infinite;"/>
+        <line x1="60%" y1="55%" x2="82%" y2="74%" stroke="url(#grad-line-r)" stroke-width="1.5" stroke-dasharray="6 4" style="animation: cd-dash 19s linear infinite;"/>
+        <line x1="58%" y1="62%" x2="76%" y2="92%" stroke="url(#grad-line-r)" stroke-width="1.5" stroke-dasharray="6 4" style="animation: cd-dash 15s linear infinite;"/>
+      </svg>
+
+      <!-- Side labels -->
+      <div class="cd-side-label" style="left:2%; top:4%;">Your Stack</div>
+      <div class="cd-side-label" style="right:2%; top:4%;">Who Uses It</div>
+
+      <!-- LEFT NODES: Sales & Marketing Stack -->
+      <div class="cd-node" style="left:2%; top:12%;">
+        <div class="cd-icon" style="background:rgba(37,99,235,0.15);">☁️</div>
+        <div><div class="cd-label">Salesforce</div><div class="cd-sub">Leads & Deals</div></div>
+      </div>
+      <div class="cd-node" style="left:0%; top:32%;">
+        <div class="cd-icon" style="background:rgba(124,58,237,0.15);">📧</div>
+        <div><div class="cd-label">HubSpot</div><div class="cd-sub">Campaigns</div></div>
+      </div>
+      <div class="cd-node" style="left:1%; top:52%;">
+        <div class="cd-icon" style="background:rgba(6,182,212,0.15);">💳</div>
+        <div><div class="cd-label">Stripe</div><div class="cd-sub">Billing</div></div>
+      </div>
+      <div class="cd-node" style="left:0%; top:72%;">
+        <div class="cd-icon" style="background:rgba(234,88,12,0.15);">📊</div>
+        <div><div class="cd-label">BigQuery</div><div class="cd-sub">Analytics</div></div>
+      </div>
+      <div class="cd-node" style="left:3%; top:90%;">
+        <div class="cd-icon" style="background:rgba(37,99,235,0.15);">📄</div>
+        <div><div class="cd-label">Google Docs</div><div class="cd-sub">Proposals</div></div>
+      </div>
+
+      <!-- CENTER: Ogment -->
+      <div class="cd-center" style="background:#111114; width:280px;">
+        <div style="font-size:24px; margin-bottom:6px;">⬡</div>
+        <h3 style="font-size:20px; color:#ffffff;">Ogment</h3>
+        <p style="font-size:10px; color:#fafafa; margin-top:4px; text-transform:uppercase; letter-spacing:0.08em; font-weight:700;">Open Standard · Portable Business Logic</p>
+        <div class="cd-process" style="background:#0d0d10; border-color:#2a2a30;">
+          <strong style="color:#e4e4e7;">⚙️ Skill:</strong> <strong style="color:#a78bfa;">Quote Generator</strong><br>
+          <span style="color:#71717a;">Pricing rules, discount tiers, approval thresholds</span>
+        </div>
+        <div class="cd-process" style="background:#0d0d10; border-color:#2a2a30;">
+          <strong style="color:#e4e4e7;">📦 MCP:</strong> <strong style="color:#60a5fa;">Salesforce Server</strong><br>
+          <span style="color:#71717a;">Read leads, update deals, sync contacts</span>
+        </div>
+        <div class="cd-process" style="background:#0d0d10; border-color:#2a2a30;">
+          <strong style="color:#e4e4e7;">🔌 Plugin:</strong> <strong style="color:#22d3ee;">HubSpot Sequences</strong><br>
+          <span style="color:#71717a;">Trigger nurture flows, track engagement</span>
+        </div>
+        <div style="margin-top:10px; display:flex; gap:6px; justify-content:center; flex-wrap:wrap;">
+          <div class="cd-badge" style="background:rgba(124,58,237,0.12); color:#fafafa;">🔐 Auth</div>
+          <div class="cd-badge" style="background:rgba(37,99,235,0.12); color:#fafafa;">📋 Audit</div>
+          <div class="cd-badge" style="background:rgba(6,182,212,0.12); color:#fafafa;">📊 Monitor</div>
+        </div>
+      </div>
+
+      <!-- RIGHT NODES: Who Uses It -->
+      <div class="cd-node" style="right:1%; top:6%;">
+        <div class="cd-icon" style="background:rgba(16,163,127,0.15);"><svg width="16" height="16" viewBox="0 0 24 24" fill="#10a37f"><path d="M22.28 9.37a5.93 5.93 0 0 0-.51-4.89 6.05 6.05 0 0 0-6.5-2.91A5.93 5.93 0 0 0 10.8.14a6.05 6.05 0 0 0-5.77 4.18 5.93 5.93 0 0 0-3.97 2.88 6.05 6.05 0 0 0 .74 7.09 5.93 5.93 0 0 0 .51 4.89 6.05 6.05 0 0 0 6.5 2.91 5.93 5.93 0 0 0 4.47 1.43 6.05 6.05 0 0 0 5.77-4.18 5.93 5.93 0 0 0 3.97-2.88 6.05 6.05 0 0 0-.74-7.09z"/></svg></div>
+        <div><div class="cd-label">AE on ChatGPT</div><div class="cd-sub">"Quote for Acme Corp"</div></div>
+      </div>
+      <div class="cd-node" style="right:0%; top:28%;">
+        <div class="cd-icon" style="background:rgba(204,147,100,0.15);"><svg width="16" height="16" viewBox="0 0 24 24" fill="#cc7832"><path d="M16.98 2H7.02L2 12l5.02 10h9.96L22 12 16.98 2zM12 16.5a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg></div>
+        <div><div class="cd-label">SDR on Claude</div><div class="cd-sub">"Qualify this lead"</div></div>
+      </div>
+      <div class="cd-node" style="right:2%; top:50%;">
+        <div class="cd-icon" style="background:rgba(37,99,235,0.15);">💬</div>
+        <div><div class="cd-label">Marketing on Slack</div><div class="cd-sub">"Campaign ROI?"</div></div>
+      </div>
+      <div class="cd-node" style="right:0%; top:68%;">
+        <div class="cd-icon" style="background:rgba(234,88,12,0.15);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 8c0-3 2-5 4-6M19 8c0-3-2-5-4-6M7 8c0 3 2 6 5 8M17 8c0 3-2 6-5 8M12 16v4" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+        <div><div class="cd-label">OpenClaw Agent</div><div class="cd-sub">"Run deal desk approval"</div></div>
+      </div>
+      <div class="cd-node" style="right:4%; top:86%;">
+        <div class="cd-icon" style="background:rgba(234,60,80,0.15);"><span style="color:#ea3c50; font-size:14px; font-weight:900;">n8n</span></div>
+        <div><div class="cd-label">n8n Workflow</div><div class="cd-sub">Lead scoring automation</div></div>
+      </div>
+    </div>
+
+    <!-- Mobile fallback (simple version) -->
+    <div class="cd-mobile-fallback reveal">
+      <div style="text-align:center; padding:24px; border-radius:16px; border:1px solid var(--border); background:var(--bg-card);">
+        <p style="font-size:14px; color:var(--text-muted); line-height:1.8;">
+          <strong style="color:var(--text);">Salesforce · HubSpot · Stripe · BigQuery · Google Docs</strong><br>
+          <span style="font-size:20px;">↓</span><br>
+          <span class="gradient-text" style="font-size:20px; font-weight:800;">Ogment</span><br>
+          <span style="font-size:12px;">Generate Quote · Qualify Lead · Deal Approval</span><br>
+          <span style="font-size:20px;">↓</span><br>
+          <strong style="color:var(--text);">ChatGPT · Claude · Slack · Custom Agents · Mobile</strong>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="examples">
+  <div class="container">
+    <div class="section-header reveal" style="text-align:center;">
+      <div class="section-label">See It In Action</div>
+      <h2 class="section-title">Two teams. One platform.<br><span class="gradient-text">Same business rules everywhere.</span></h2>
+    </div>
+
+    <!-- Sales Example -->
+    <div class="reveal" style="margin-bottom:64px;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:24px;">
+        <div style="width:40px; height:40px; border-radius:10px; background:rgba(124,58,237,0.15); display:flex; align-items:center; justify-content:center; font-size:20px;">💰</div>
+        <div>
+          <div style="font-size:18px; font-weight:800; color:var(--text);">Sales: "Generate a quote for Acme Corp"</div>
+          <div style="font-size:13px; color:var(--text-dim);">An Account Executive needs a custom proposal — fast.</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:0; align-items:stretch; border-radius:16px; overflow:hidden; border:1px solid var(--border);">
+        <div style="flex:1; padding:28px; background:var(--bg-card); border-right:1px solid var(--border);">
+          <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-dim); margin-bottom:16px;">What happens behind the scenes</div>
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:28px; height:28px; border-radius:50%; background:rgba(124,58,237,0.15); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:var(--accent-1); flex-shrink:0;">1</div>
+              <div><div style="font-size:13px; font-weight:600; color:var(--text);">AE types in ChatGPT:</div><div style="font-size:12px; color:var(--text-muted); margin-top:2px; font-style:italic;">"Create a quote for Acme Corp, 50 seats, annual plan"</div></div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:28px; height:28px; border-radius:50%; background:rgba(37,99,235,0.15); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:var(--accent-2); flex-shrink:0;">2</div>
+              <div><div style="font-size:13px; font-weight:600; color:var(--text);">Ogment pulls Acme's data from Salesforce</div><div style="font-size:12px; color:var(--text-muted); margin-top:2px;">Account history, current plan, past purchases</div></div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:28px; height:28px; border-radius:50%; background:rgba(6,182,212,0.15); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:var(--accent-3); flex-shrink:0;">3</div>
+              <div><div style="font-size:13px; font-weight:600; color:var(--text);">Applies your company's pricing rules</div><div style="font-size:12px; color:var(--text-muted); margin-top:2px;">Volume discount, loyalty tier, annual commitment rate</div></div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:28px; height:28px; border-radius:50%; background:rgba(124,58,237,0.15); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:var(--accent-1); flex-shrink:0;">4</div>
+              <div><div style="font-size:13px; font-weight:600; color:var(--text);">Generates a branded PDF proposal</div><div style="font-size:12px; color:var(--text-muted); margin-top:2px;">Ready to send. Logged in the audit trail.</div></div>
+            </div>
+          </div>
+        </div>
+        <div style="width:240px; padding:28px; background:var(--bg-elevated); display:flex; flex-direction:column; justify-content:center; gap:16px;">
+          <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-dim); margin-bottom:4px;">Works the same on</div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:28px; height:28px; border-radius:6px; background:rgba(16,163,127,0.15); display:flex; align-items:center; justify-content:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#10a37f"><path d="M22.28 9.37a5.93 5.93 0 0 0-.51-4.89 6.05 6.05 0 0 0-6.5-2.91A5.93 5.93 0 0 0 10.8.14a6.05 6.05 0 0 0-5.77 4.18 5.93 5.93 0 0 0-3.97 2.88 6.05 6.05 0 0 0 .74 7.09 5.93 5.93 0 0 0 .51 4.89 6.05 6.05 0 0 0 6.5 2.91 5.93 5.93 0 0 0 4.47 1.43 6.05 6.05 0 0 0 5.77-4.18 5.93 5.93 0 0 0 3.97-2.88 6.05 6.05 0 0 0-.74-7.09z"/></svg></div>
+            <span style="font-size:13px; color:var(--text); font-weight:600;">ChatGPT</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:28px; height:28px; border-radius:6px; background:rgba(204,147,100,0.15); display:flex; align-items:center; justify-content:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#cc7832"><path d="M16.98 2H7.02L2 12l5.02 10h9.96L22 12 16.98 2zM12 16.5a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg></div>
+            <span style="font-size:13px; color:var(--text); font-weight:600;">Claude</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:28px; height:28px; border-radius:6px; background:rgba(234,88,12,0.15); display:flex; align-items:center; justify-content:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 8c0-3 2-5 4-6M19 8c0-3-2-5-4-6M7 8c0 3 2 6 5 8M17 8c0 3-2 6-5 8M12 16v4" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+            <span style="font-size:13px; color:var(--text); font-weight:600;">OpenClaw</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:28px; height:28px; border-radius:6px; background:rgba(124,58,237,0.15); display:flex; align-items:center; justify-content:center;">🤖</div>
+            <span style="font-size:13px; color:var(--text); font-weight:600;">Your custom agent</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Marketing Example -->
+    <div class="reveal">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:24px;">
+        <div style="width:40px; height:40px; border-radius:10px; background:rgba(6,182,212,0.15); display:flex; align-items:center; justify-content:center; font-size:20px;">📣</div>
+        <div>
+          <div style="font-size:18px; font-weight:800; color:var(--text);">Marketing: "How did last week's campaign perform?"</div>
+          <div style="font-size:13px; color:var(--text-dim);">A marketing manager wants results — without digging through 3 dashboards.</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:0; align-items:stretch; border-radius:16px; overflow:hidden; border:1px solid var(--border);">
+        <div style="flex:1; padding:28px; background:var(--bg-card); border-right:1px solid var(--border);">
+          <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-dim); margin-bottom:16px;">What happens behind the scenes</div>
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:28px; height:28px; border-radius:50%; background:rgba(6,182,212,0.15); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:var(--accent-3); flex-shrink:0;">1</div>
+              <div><div style="font-size:13px; font-weight:600; color:var(--text);">Marketing manager asks on Slack:</div><div style="font-size:12px; color:var(--text-muted); margin-top:2px; font-style:italic;">"How did the Product Hunt launch campaign do last week?"</div></div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:28px; height:28px; border-radius:50%; background:rgba(124,58,237,0.15); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:var(--accent-1); flex-shrink:0;">2</div>
+              <div><div style="font-size:13px; font-weight:600; color:var(--text);">Ogment pulls data from HubSpot + Google Analytics</div><div style="font-size:12px; color:var(--text-muted); margin-top:2px;">Email opens, click rates, landing page conversions, signups</div></div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:28px; height:28px; border-radius:50%; background:rgba(37,99,235,0.15); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:var(--accent-2); flex-shrink:0;">3</div>
+              <div><div style="font-size:13px; font-weight:600; color:var(--text);">Cross-references with Stripe revenue data</div><div style="font-size:12px; color:var(--text-muted); margin-top:2px;">New trials, conversions, actual revenue attributed to campaign</div></div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:28px; height:28px; border-radius:50%; background:rgba(6,182,212,0.15); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:var(--accent-3); flex-shrink:0;">4</div>
+              <div><div style="font-size:13px; font-weight:600; color:var(--text);">Replies with a plain-English summary + chart</div><div style="font-size:12px; color:var(--text-muted); margin-top:2px;">"1,240 signups, 12% conversion, $18K new MRR. Best channel: Twitter ads."</div></div>
+            </div>
+          </div>
+        </div>
+        <div style="width:240px; padding:28px; background:var(--bg-elevated); display:flex; flex-direction:column; justify-content:center; gap:16px;">
+          <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-dim); margin-bottom:4px;">Works the same on</div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:28px; height:28px; border-radius:6px; background:rgba(37,99,235,0.15); display:flex; align-items:center; justify-content:center;">💬</div>
+            <span style="font-size:13px; color:var(--text); font-weight:600;">Slack</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:28px; height:28px; border-radius:6px; background:rgba(16,163,127,0.15); display:flex; align-items:center; justify-content:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#10a37f"><path d="M22.28 9.37a5.93 5.93 0 0 0-.51-4.89 6.05 6.05 0 0 0-6.5-2.91A5.93 5.93 0 0 0 10.8.14a6.05 6.05 0 0 0-5.77 4.18 5.93 5.93 0 0 0-3.97 2.88 6.05 6.05 0 0 0 .74 7.09 5.93 5.93 0 0 0 .51 4.89 6.05 6.05 0 0 0 6.5 2.91 5.93 5.93 0 0 0 4.47 1.43 6.05 6.05 0 0 0 5.77-4.18 5.93 5.93 0 0 0 3.97-2.88 6.05 6.05 0 0 0-.74-7.09z"/></svg></div>
+            <span style="font-size:13px; color:var(--text); font-weight:600;">ChatGPT</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:28px; height:28px; border-radius:6px; background:rgba(234,60,80,0.15); display:flex; align-items:center; justify-content:center;"><span style="color:#ea3c50; font-size:10px; font-weight:900;">n8n</span></div>
+            <span style="font-size:13px; color:var(--text); font-weight:600;">n8n workflow</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:28px; height:28px; border-radius:6px; background:rgba(124,58,237,0.15); display:flex; align-items:center; justify-content:center;">🤖</div>
+            <span style="font-size:13px; color:var(--text); font-weight:600;">Your custom agent</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="use-cases">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Real-World Impact</div>
+      <h2 class="section-title">How the control plane + portability advantage plays out</h2>
+      <p class="section-desc">Every use case benefits from defining once and deploying everywhere—with governance built in.</p>
+    </div>
+    <div class="use-cases-grid">
+      <div class="use-case-card reveal">
+        <div class="use-case-icon">⚡</div>
+        <h3>Employee Productivity</h3>
+        <p>Employees access Salesforce, Jira, and Notion from one conversation. But they can use their preferred AI—ChatGPT, Claude, or your custom assistant.</p>
+        <div class="use-case-benefit">✓ Same tools, any AI client</div>
+      </div>
+      <div class="use-case-card reveal">
+        <div class="use-case-icon">🔌</div>
+        <h3>Customer-Facing Products</h3>
+        <p>Your product appears inside ChatGPT AND Claude simultaneously. No separate integrations. When customers switch AI assistants, your integration follows them.</p>
+        <div class="use-case-benefit">✓ Multi-platform distribution, one codebase</div>
+      </div>
+      <div class="use-case-card reveal">
+        <div class="use-case-icon">🤖</div>
+        <h3>Agentic Workflows</h3>
+        <p>Build agent workflows that aren't tied to one AI provider. If GPT-4 gets expensive, switch to Claude. If Claude gets rate-limited, route to your self-hosted model.</p>
+        <div class="use-case-benefit">✓ Provider flexibility in production</div>
+      </div>
+      <div class="use-case-card reveal">
+        <div class="use-case-icon">🌐</div>
+        <h3>Partner Ecosystems</h3>
+        <p>Give partners scoped access to your APIs. They integrate once via MCP and can expose your capabilities to their entire AI stack—current and future.</p>
+        <div class="use-case-benefit">✓ Future-proof partner integrations</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="platform" style="background: var(--bg-elevated);">
+  <div class="container">
+    <div class="section-header reveal" style="text-align:center;">
+      <div class="section-label">From Prototype to Production</div>
+      <h2 class="section-title">Build portable MCPs.<br><span class="gradient-text">Deploy with confidence.</span></h2>
+      <p class="section-desc" style="margin:16px auto 0;">The control plane and portability benefits mean nothing without enterprise governance. We handle both.</p>
+    </div>
+    <div class="pillars-grid reveal">
+      <div class="pillar">
+        <div class="pillar-num">01</div>
+        <h3>Build</h3>
+        <p>Describe MCPs in plain English. AI generates portable, production-grade servers that work with any MCP client.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">02</div>
+        <h3>Marketplace</h3>
+        <p>300+ enterprise-ready connectors, all MCP-native. Plug into any AI client, not just one vendor's ecosystem.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">03</div>
+        <h3>Govern</h3>
+        <p>Auth, permissions, audit logs. Deploy to any AI client with the same security model. No vendor-specific governance.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">04</div>
+        <h3>Monitor</h3>
+        <p>Track usage across all AI clients from one dashboard. Switch providers without losing visibility.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="container">
+    <div class="section-header reveal" style="text-align:center;">
+      <div class="section-label">FAQ</div>
+      <h2 class="section-title">Your questions, answered</h2>
+    </div>
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <button class="faq-q">Why not just build ChatGPT plugins?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+        <div class="faq-a"><p>ChatGPT plugins only work with ChatGPT. If OpenAI changes pricing, deprecates features, or you want to switch to Claude, you rebuild everything. MCP works with any AI client—build once, deploy everywhere.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">What happens if we switch LLM providers?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+        <div class="faq-a"><p>Nothing breaks. Your MCP integrations work with the new provider immediately. No redevelopment, no vendor-specific rewrites. Just point your new AI client to your existing MCP servers.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">How is this different from vendor-specific governance tools?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+        <div class="faq-a"><p>Those tools lock you into one AI provider's ecosystem. We govern MCP integrations that work across all providers. Your governance investment is portable—just like your integrations.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Do I need developers to build MCPs?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+        <div class="faq-a"><p>No. Technical PMs and Solution Managers describe MCPs in plain English. Engineers review and approve through familiar workflows—they're just not the bottleneck anymore.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Can we deploy MCPs to multiple AI clients simultaneously?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+        <div class="faq-a"><p>Yes. That's the point. Build one MCP server, expose it to ChatGPT, Claude, Cursor, and your custom agents simultaneously. One integration, universal access.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">What security and compliance features do you offer?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+        <div class="faq-a"><p>TLS 1.2+ encryption, OAuth 2.0 authentication, complete audit logs across all AI clients, rate limiting. GDPR compliant with DPA. Deployment options from cloud to VPC to on-premise.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <div class="reveal">
+      <h2>Stop rebuilding integrations<br><span class="gradient-text">for every AI vendor</span></h2>
+      <p>See how enterprises deploy portable, governed MCPs that work with any AI client.</p>
+      <a href="https://calendly.com/teo-bg/20min-access" class="btn btn-primary" target="_blank">
+        Book a Demo
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>© 2026 Ogment. Enterprise Platform for MCP.</p>
+  </div>
+</footer>
+
+<script>
+// Nav scroll effect
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 20);
+});
+
+// Reveal on scroll
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 100);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(el => observer.observe(el));
+
+// FAQ accordion
+document.querySelectorAll('.faq-q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+</script>
+
+</body>
+</html>
