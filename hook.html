@@ -370,13 +370,14 @@ h1 .claw {
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 36px 220px 36px 1fr;
-  align-items: center;
+  align-items: stretch;
   gap: 0;
 }
 .diagram-col {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  justify-content: flex-start;
 }
 .diagram-label {
   font-size: 10px;
@@ -462,6 +463,7 @@ h1 .claw {
   align-items: center;
   justify-content: center;
   gap: 6px;
+  padding-top: 30px;
 }
 .darrow {
   width: 20px;
@@ -681,12 +683,8 @@ footer a:hover { color: var(--text); }
         <div><div class="dn">Slack</div></div>
       </div>
       <div class="diagram-node">
-        <div class="di" style="background:rgba(234,88,12,0.12);">📋</div>
-        <div><div class="dn">Jira</div></div>
-      </div>
-      <div class="diagram-node">
-        <div class="di" style="background:rgba(74,222,128,0.12);">💳</div>
-        <div><div class="dn">Stripe</div></div>
+        <div class="di" style="background:rgba(234,88,12,0.12);">🔗</div>
+        <div><div class="dn">Your APIs</div><div class="ds">Custom logic</div></div>
       </div>
       <div class="diagram-node">
         <div class="di" style="background:rgba(167,139,250,0.12);">🗄️</div>
@@ -695,7 +693,6 @@ footer a:hover { color: var(--text); }
     </div>
 
     <div class="diagram-arrows">
-      <div class="darrow"></div>
       <div class="darrow"></div>
       <div class="darrow"></div>
       <div class="darrow"></div>
